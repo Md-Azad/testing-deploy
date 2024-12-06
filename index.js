@@ -24,6 +24,16 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    const equipmentCollection = client.db("e-Sports").collection("equipments");
+    // const userCollection =client.db("e-Sports").collection("users");
+
+    app.put("/equipments", async (req, res) => {
+      const data = req.body;
+      const result = await equipmentCollection.insertOne(data);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
