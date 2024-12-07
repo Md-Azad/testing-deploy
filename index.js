@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cn37c5v.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -27,6 +27,19 @@ async function run() {
 
     const equipmentCollection = client.db("e-Sports").collection("equipments");
     // const userCollection =client.db("e-Sports").collection("users");
+
+    app.get("/all-equipment", async (req, res) => {
+      const equipments = equipmentCollection.find();
+      const result = await equipments.toArray();
+      res.send(result);
+    });
+
+    app.get("/details/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await equipmentCollection.findOne(query);
+      res.send(result);
+    });
 
     app.put("/equipments", async (req, res) => {
       const data = req.body;
