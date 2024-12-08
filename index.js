@@ -34,6 +34,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/equipments", async (req, res) => {
+      const equipments = equipmentCollection.find().limit(6);
+      const result = await equipments.toArray();
+      res.send(result);
+    });
+
     app.get("/mylist", async (req, res) => {
       const userEmail = req.query.email;
       const query = { email: userEmail };
