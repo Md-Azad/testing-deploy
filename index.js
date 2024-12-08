@@ -34,6 +34,14 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/mylist", async (req, res) => {
+      const userEmail = req.query.email;
+      const query = { email: userEmail };
+      const cursor = equipmentCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     app.get("/details/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -44,6 +52,26 @@ async function run() {
     app.put("/equipments", async (req, res) => {
       const data = req.body;
       const result = await equipmentCollection.insertOne(data);
+      res.send(result);
+    });
+
+    app.put("/all-equipment/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+
+      const updatedDoc = {
+        $set: {
+          data,
+        },
+      };
+
+      const result = await equipmentCollection.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
       res.send(result);
     });
 
