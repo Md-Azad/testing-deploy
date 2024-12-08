@@ -58,12 +58,21 @@ async function run() {
     app.put("/all-equipment/:id", async (req, res) => {
       const id = req.params.id;
       const data = req.body;
+      console.log(data);
       const filter = { _id: new ObjectId(id) };
       const options = { upsert: true };
 
       const updatedDoc = {
         $set: {
-          data,
+          itemName: data.itemName,
+          category: data.category,
+          description: data.description,
+          price: data.price,
+          rating: data.rating,
+          processing_time: data.processing_time,
+          stock: data.stock,
+          photo: data.photo,
+          customization: data.customization,
         },
       };
 
